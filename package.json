@@ -1,0 +1,30 @@
+{
+  "name": "sql-employee-tracker",
+  "version": "1.0.0",
+  "description": "sql employee tracker",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lacko3006/sql-employee-tracker.git"
+  },
+  "keywords": [
+    "sql",
+    "employee",
+    "tracker"
+  ],
+  "author": "Sam Laxton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lacko3006/sql-employee-tracker/issues"
+  },
+  "homepage": "https://github.com/Lacko3006/sql-employee-tracker#readme",
+  "dependencies": {
+    "inquirer": "^9.1.4"
+  }
+}
