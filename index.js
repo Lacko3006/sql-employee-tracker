@@ -45,17 +45,20 @@ function showDepartment() {
 }
 
 function showRoles() {
-  db.query(`SELECT * FROM roles`, function (err, results) {
-    console.table(`\nRoles Table:`, results);
-    startQuestions();
-  });
+  db.query(
+    `SELECT * FROM roles JOIN departments ON roles.department_id  = departments.name`,
+    function (err, results) {
+      console.table(`\nRoles Table:`, results);
+      startQuestions();
+    }
+  );
 }
 
 function tableOptions(answers) {
   const answer = answers.employeeTracker;
   if (answer === "View all departments") {
     showDepartment();
-  } else if ((answer = "View all roles")) {
+  } else if (answer === "View all roles") {
     showRoles();
   }
 }
