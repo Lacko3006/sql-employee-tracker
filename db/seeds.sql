@@ -1,7 +1,7 @@
 ALTER TABLE departments AUTO_INCREMENT=0;
 ALTER TABLE roles AUTO_INCREMENT=0;
 
-INSERT INTO departments (name)
+INSERT INTO departments (department)
 VALUES ("Sales"), ("Engineering"), ("Finance"), ("Legal");
 
 INSERT INTO roles (title, salary, department_id)

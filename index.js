@@ -46,7 +46,7 @@ function showDepartment() {
 
 function showRoles() {
   db.query(
-    `SELECT * FROM roles JOIN departments ON roles.department_id  = departments.name`,
+    `SELECT * FROM roles JOIN departments ON roles.department_id = departments.id`,
     function (err, results) {
       console.table(`\nRoles Table:`, results);
       startQuestions();
