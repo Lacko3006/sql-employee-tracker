@@ -61,9 +61,9 @@ function showEmployees() {
     employee.id, employee.first_name, employee.last_name, roles.title, departments.department, roles.salary, 
     CONCAT(e1.first_name, ' ', e1.last_name) AS manager
     FROM employee 
-    JOIN roles ON employee.role_id = roles.id 
-    JOIN departments ON roles.department_id = departments.id
-    JOIN employee e1 ON employee.manager_id = e1.id`,
+    LEFT JOIN roles ON employee.role_id = roles.id 
+    LEFT JOIN departments ON roles.department_id = departments.id
+    LEFT JOIN employee e1 ON employee.manager_id = e1.id`,
     function (err, results) {
       console.table(`\nEmployee Table:`, results);
       startQuestions();
