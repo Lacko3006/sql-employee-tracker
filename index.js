@@ -46,11 +46,23 @@ function showDepartment() {
 
 function showRoles() {
   db.query(
-    `SELECT roles.id, title, salary, departments.department FROM roles JOIN departments ON roles.department_id = departments.id`,
+    `SELECT roles.id, title, salary, departments.department 
+    FROM roles JOIN departments ON roles.department_id = departments.id`,
     function (err, results) {
       console.table(`\nRoles Table:`, results);
       startQuestions();
     }
+  );
+}
+
+function showEmployees() {
+  db.query(
+    `SELECT 
+    employee.id, first_name, last_name, roles.title, departments.department, roles.salary 
+    FROM employee 
+    LEFT JOIN roles ON employee.role_id = roles.id 
+    LEFT JOIN departments ON roles.department_id = departments.id
+    LEFT JOIN employee ON employee.manager_id = employee.id`
   );
 }
 
@@ -60,5 +72,7 @@ function tableOptions(answers) {
     showDepartment();
   } else if (answer === "View all roles") {
     showRoles();
+  } else if (answer === "View all employees") {
+    showEmployees();
   }
 }

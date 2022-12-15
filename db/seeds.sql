@@ -18,4 +18,4 @@ VALUES ("Sales Lead", 100000, 1),
 -- employee ids, first names, last names, job titles, departments, salaries, and managers
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("John", "Doe", 1, 1),
-       ("Sam", "Laxton", 2, 2)
+       ("Sam", "Laxton", 2, 2);
