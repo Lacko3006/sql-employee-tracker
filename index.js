@@ -71,6 +71,18 @@ function showEmployees() {
   );
 }
 
+function addDepartment() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "addDepartment",
+      message: "Enter new department name:",
+    },
+  ]);
+}
+
+
+
 function tableOptions(answers) {
   const answer = answers.employeeTracker;
   if (answer === "View all departments") {
@@ -79,5 +91,7 @@ function tableOptions(answers) {
     showRoles();
   } else if (answer === "View all employees") {
     showEmployees();
+  } else if (answer === "Add a department") {
+    addDepartment();
   }
 }
