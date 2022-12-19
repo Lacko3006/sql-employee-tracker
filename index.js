@@ -95,6 +95,37 @@ function updateDepartment(answers) {
   );
 }
 
+function addRole() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "roleName",
+      message: "Enter a new role:",
+    },
+    {
+      type: "input",
+      name: "salary",
+      message: "Enter a salary for the new role:",
+    },
+    {
+      type: "input",
+      name: "department",
+      choices: departmentArray(),
+      message: "Select a new department:",
+    },
+  ]);
+}
+
+function departmentArray() {
+  const departmentArray = [];
+  db.query(`SELECT department FROM departments`, function (err, results) {
+    results.forEach((departments) =>
+      departmentArray.push(departments.department)
+    );
+  });
+  return departmentArray;
+}
+
 function tableOptions(answers) {
   const answer = answers.employeeTracker;
   if (answer === "View all departments") {
@@ -105,5 +136,7 @@ function tableOptions(answers) {
     showEmployees();
   } else if (answer === "Add a department") {
     addDepartment();
+  } else if (answer === "Add a role") {
+   addRole(); 
   }
 }
