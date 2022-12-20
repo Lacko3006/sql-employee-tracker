@@ -111,14 +111,14 @@ function addRole() {
       {
         type: "list",
         name: "department",
-        choices: departmentArray(),
+        choices: createDepartmentArray(),
         message: "Select a new department:",
       },
     ])
     .then(updateRole);
 }
 
-function departmentArray() {
+function createDepartmentArray() {
   const departmentArray = [];
   db.query(`SELECT department FROM departments`, function (err, results) {
     results.forEach((departments) =>
@@ -154,6 +154,28 @@ function departmentId(department) {
   });
 }
 
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "What is the employees first name?",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "What is the employees last name?",
+      },
+      {
+        type: "list",
+        name: "role",
+        // message: make role array ,
+      },
+    ])
+}
+
+
 function tableOptions(answers) {
   const answer = answers.employeeTracker;
   if (answer === "View all departments") {
@@ -166,5 +188,7 @@ function tableOptions(answers) {
     addDepartment();
   } else if (answer === "Add a role") {
     addRole();
+  } else if (answer === "Add an employee") {
+    addEmployee();
   }
 }
