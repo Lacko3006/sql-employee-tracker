@@ -155,37 +155,40 @@ function departmentId(department) {
 }
 
 function addEmployee() {
-  inquirer.prompt([
-    {
-      type: "input",
-      name: "firstName",
-      message: "What is the employees first name?",
-    },
-    {
-      type: "input",
-      name: "lastName",
-      message: "What is the employees last name?",
-    },
-    {
-      type: "list",
-      name: "roles",
-      choices: createRoleArray(),
-      message: "Select a role for the new employee:",
-    },
-    {
-      type: "list",
-      name: "manager",
-      choices: createManagerArray(),
-      message: "Select Manager for new employee:",
-    },
-  ]);
-  
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "firstName",
+        message: "What is the employees first name?",
+      },
+      {
+        type: "input",
+        name: "lastName",
+        message: "What is the employees last name?",
+      },
+      {
+        type: "list",
+        name: "roles",
+        choices: createRoleArray(),
+        message: "Select a role for the new employee:",
+      },
+      {
+        type: "list",
+        name: "manager",
+        choices: createManagerArray(),
+        message: "Select Manager for new employee:",
+      },
+    ])
+    .then(updateEmployee);
 }
 
 function createRoleArray() {
   const roleArray = [];
   db.query(`SELECT id, title FROM roles`, function (err, results) {
-    results.forEach((roles) => roleArray.push(`${roles.title}`));
+    results.forEach((roles) =>
+      roleArray.push(`${roles.title} - Role ID: ${roles.id}`)
+    );
   });
   return roleArray;
 }
@@ -196,11 +199,27 @@ function createManagerArray() {
     `SELECT id, first_name, last_name FROM employee WHERE manager_id IS NULL`,
     function (err, results) {
       results.forEach((manager) =>
-        managerArray.push(`${manager.first_name} ${manager.last_name}`)
+        managerArray.push(
+          `${manager.first_name} ${manager.last_name} - Role ID:${manager.id}`
+        )
       );
     }
   );
   return managerArray;
+}
+
+function updateEmployee(answer) {
+  const { firstName, lastName, roles, manager } = answer;
+  db.query(
+    `INSERT INTO employee (first_name, last_name, role_id, manager_id) 
+  VALUES ("${firstName}", "${lastName}", "${roles.split(":")[1]}", "${
+      manager.split(":")[1]
+    }")`,
+    function (err, results) {
+      console.log(`${firstName} ${lastName} added to employee table`);
+      startQuestions();
+    }
+  );
 }
 
 
