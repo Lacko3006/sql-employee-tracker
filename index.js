@@ -155,24 +155,52 @@ function departmentId(department) {
 }
 
 function addEmployee() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "firstName",
-        message: "What is the employees first name?",
-      },
-      {
-        type: "input",
-        name: "lastName",
-        message: "What is the employees last name?",
-      },
-      {
-        type: "list",
-        name: "role",
-        // message: make role array ,
-      },
-    ])
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "firstName",
+      message: "What is the employees first name?",
+    },
+    {
+      type: "input",
+      name: "lastName",
+      message: "What is the employees last name?",
+    },
+    {
+      type: "list",
+      name: "roles",
+      choices: createRoleArray(),
+      message: "Select a role for the new employee:",
+    },
+    {
+      type: "list",
+      name: "manager",
+      choices: createManagerArray(),
+      message: "Select Manager for new employee:",
+    },
+  ]);
+  
+}
+
+function createRoleArray() {
+  const roleArray = [];
+  db.query(`SELECT id, title FROM roles`, function (err, results) {
+    results.forEach((roles) => roleArray.push(`${roles.title}`));
+  });
+  return roleArray;
+}
+
+function createManagerArray() {
+  const managerArray = [];
+  db.query(
+    `SELECT id, first_name, last_name FROM employee WHERE manager_id IS NULL`,
+    function (err, results) {
+      results.forEach((manager) =>
+        managerArray.push(`${manager.first_name} ${manager.last_name}`)
+      );
+    }
+  );
+  return managerArray;
 }
 
 
