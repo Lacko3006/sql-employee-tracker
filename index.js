@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const fs = require("fs");
 const mysql = require("mysql2");
 const consoleTable = require("console.table");
+const { resolve } = require("path");
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -180,7 +181,7 @@ function addEmployee() {
         message: "Select Manager for new employee:",
       },
     ])
-    .then(updateEmployee);
+    .then(newEmployee);
 }
 
 function createRoleArray() {
@@ -208,7 +209,7 @@ function createManagerArray() {
   return managerArray;
 }
 
-function updateEmployee(answer) {
+function newEmployee(answer) {
   const { firstName, lastName, roles, manager } = answer;
   db.query(
     `INSERT INTO employee (first_name, last_name, role_id, manager_id) 
@@ -220,6 +221,40 @@ function updateEmployee(answer) {
       startQuestions();
     }
   );
+}
+
+async function updateEmployee() {
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "employee",
+      choices: await createEmployeeArray(),
+      message: "Select employee to update:",
+    },
+    {
+      type: "list",
+      name: "roles",
+      choices: createRoleArray(),
+      message: "Select a role for the employee:",
+    },
+  ]);
+}
+
+function createEmployeeArray() {
+  const employeeArray = [];
+  return new Promise((resolve, rej) => {
+    db.query(
+      `SELECT id, first_name, last_name FROM employee`,
+      function (err, results) {
+        results.forEach((employee) =>
+          employeeArray.push(
+            `${employee.first_name} ${employee.last_name} ID:${employee.id}`
+          )
+        );
+        resolve(employeeArray);
+      }
+    );
+  });
 }
 
 
@@ -237,5 +272,7 @@ function tableOptions(answers) {
     addRole();
   } else if (answer === "Add an employee") {
     addEmployee();
+  } else if (answer === "Update an employee role") {
+    updateEmployee();
   }
 }
