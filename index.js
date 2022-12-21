@@ -224,20 +224,22 @@ function newEmployee(answer) {
 }
 
 async function updateEmployee() {
-  inquirer.prompt([
-    {
-      type: "list",
-      name: "employee",
-      choices: await createEmployeeArray(),
-      message: "Select employee to update:",
-    },
-    {
-      type: "list",
-      name: "roles",
-      choices: createRoleArray(),
-      message: "Select a role for the employee:",
-    },
-  ]);
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "updatedEmployee",
+        choices: await createEmployeeArray(),
+        message: "Select employee to update:",
+      },
+      {
+        type: "list",
+        name: "newRole",
+        choices: createRoleArray(),
+        message: "Select a new role for the employee:",
+      },
+    ])
+    .then(newRole);
 }
 
 function createEmployeeArray() {
@@ -246,15 +248,28 @@ function createEmployeeArray() {
     db.query(
       `SELECT id, first_name, last_name FROM employee`,
       function (err, results) {
-        results.forEach((employee) =>
+        results.forEach((updatedEmployee) =>
           employeeArray.push(
-            `${employee.first_name} ${employee.last_name} ID:${employee.id}`
+            `${updatedEmployee.first_name} ${updatedEmployee.last_name} ID:${updatedEmployee.id}`
           )
         );
         resolve(employeeArray);
       }
     );
   });
+}
+
+function newRole(answer) {
+  const { updatedEmployee, newRole } = answer;
+  db.query(
+    `UPDATE employee SET role_id = ${newRole.split(":")[1]} WHERE id = ${
+      updatedEmployee.split(":")[1]
+    }`,
+    function (err, results) {
+      console.log(updatedEmployee + " updated!");
+      startQuestions();
+    }
+  );
 }
 
 
